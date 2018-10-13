@@ -1,0 +1,26 @@
+{
+  "name": "sd-hack",
+  "version": "1.0.0",
+  "description": "Hack for SDHack 2018",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.16.4",
+    "http": "^0.0.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Andrew-Casner/2FactorBiometricAuth.git"
+  },
+  "author": "Andrew Casner and Nick Erokhin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Andrew-Casner/2FactorBiometricAuth/issues"
+  },
+  "homepage": "https://github.com/Andrew-Casner/2FactorBiometricAuth#readme"
+}
