@@ -9,6 +9,7 @@ import json
 #210 * 292
 
 app = Flask(__name__)
+
 class PDF(FPDF):
 
     images = ["IMG_9839.JPG", "IMG_9834.JPG", "IMG_9840.JPG"]
@@ -43,8 +44,8 @@ def getPDF():
     imgHeight = 65
     startX = 30
     startY = 40
-    data = request.data
-    data = json.loads(data)
+    data = json.loads(request.data)
+
     images = data["TaggedIms"]
 
     interval = 10
@@ -59,8 +60,9 @@ def getPDF():
         if os.path.exists(img):
             os.remove(img)
     pdf.output('./temp.pdf', 'F')
+    b64 = ""
     with open("temp.pdf", "rb") as pdfOut:
-        b64 = str(base64.b64encode(pdfOut.read()))
+        b64 = base64.b64encode(pdfOut.read()).decode('utf-8')
         return jsonify({"pdfb64": b64})
     os.remove("temp.pdf")
 
