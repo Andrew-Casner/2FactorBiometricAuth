@@ -4,8 +4,12 @@
   "description": "Hack for SDHack 2018",
   "main": "server.js",
   "dependencies": {
+    "aws-sdk": "^2.334.0",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
     "express": "^4.16.4",
     "http": "^0.0.0",
+    "multer": "^1.4.1",
     "path": "^0.12.7"
   },
   "devDependencies": {},
