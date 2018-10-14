@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PhotoService } from './../services/photo.service';
+import { HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-landing-page',
@@ -9,7 +10,9 @@ import { PhotoService } from './../services/photo.service';
 })
 export class LandingPageComponent implements OnInit {
 
-  constructor(private photoService: PhotoService) { }
+file;
+payload;
+  constructor(private photoService: PhotoService, private http: HttpClient) { }
 
   photos;
 
@@ -27,5 +30,35 @@ export class LandingPageComponent implements OnInit {
 
   upload(event) {
     this.photoService.uploadPhoto(this.file);
+  }
+
+  send() {
+    console.log("Sending Consent Forms");
+    this.photoService.getUserImageMatches('drew').subscribe(data => this.save(data));
+    this.photoService.getUserImageMatches('nick').subscribe(data => this.save(data));
+  }
+
+  save(data) { 
+    if ( data.name === 'drew' ){
+        this.payload = {
+        'fullName': 'Drew Casner',
+        'email': 'anca0444@colorado.edu',
+        'TaggedIms': data.matches,
+        'bucket': 'sdhack'
+        }
+    }
+    else{
+        this.payload = {
+        'fullName': 'Nick Erokhin',
+        'email': 'nier7172@colorado.edu',
+        'TaggedIms': data.matches,
+        'bucket': 'sdhack'
+        }
+    }
+    this.http.post('http://localhost:8080/sendDocument', this.payload).subscribe(data => this.sendDoc(data));
+  }
+
+  sendDoc(data) {
+    console.log(data);
   }
 }

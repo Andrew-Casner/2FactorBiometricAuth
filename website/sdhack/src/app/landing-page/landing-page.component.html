@@ -1,5 +1,10 @@
 <app-header></app-header>
 <div class="container">
+    <div class="row" id="card" (click)="send()">
+        <div class="col-xs-12 text-center" id="names">
+            <h3>SEND CONSENT FORMS</h3>
+        </div>
+    </div>
     <div *ngFor="let photo of photos">
         <app-photo-box *ngIf="photo"
                         image={{photo?.img}}
@@ -11,7 +16,7 @@
         <h3>Add Photo</h3>
         <form method="post" enctype="multipart/form-data">
             <div>
-                <label for="file">Choose video file</label>
+                <label for="file">Choose photo file</label>
                 <input type="file" id="file" name="file" multiple (change)="fileSelect($event)">
             </div>
             <div>
