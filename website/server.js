@@ -147,7 +147,7 @@ app.post('/sendDocument', function (req, res) {
       "emailBlurb": "There were several photos taken of you during SDHacks, please tka the time to approve them",
       "status": "sent",
       "eventNotification": {
-        "url": "http://ec2-54-213-135-243.us-west-2.compute.amazonaws.com:5000/webhook",
+        "url": "http://ec2-52-12-126-217.us-west-2.compute.amazonaws.com/webhook",
         "includeCertificateOfCompletion": "false",
         "includeDocuments": "true",
         "includeDocumentFields": "true",
