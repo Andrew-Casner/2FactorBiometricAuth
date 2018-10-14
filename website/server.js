@@ -10,7 +10,7 @@ const fs = require('fs');
 
 
 
-const OAuthToken = 'eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiNjgxODVmZjEtNGU1MS00Y2U5LWFmMWMtNjg5ODEyMjAzMzE3In0.AQkAAAABAAUABwAAchHQmzHWSAgAALI03t4x1kgCACwrmmZu4FJFnVVOe267RZEVAAEAAAAYAAEAAAAFAAAADQAkAAAAZjBmMjdmMGUtODU3ZC00YTcxLWE0ZGEtMzJjZWNhZTNhOTc4EgABAAAABwAAAG1hbmFnZWQwAIB54AmYMdZI.ZDrJaF8MniC9KoszjNW2WfmlHxUfuyz-EshfSYgjGT1OTmuwPsTSPKpnZPOQC_u8FFhsOfh_zUS2yB97mAcCnJ0OgVlj_F-0-JJWAO6VdEl72ApIXzN7IFea1Ypj17W4uoq-wqqsK-ROYNiq3RKp2geWxngRxsCikuAJrmiJhyaX9Q23rKMEHHcMS7O0Vq6bohSV_v4nKNXUrD1Cp0QeXy8CXI1uX0EyahUE-xyPOxhXNjIYBY0iRWhsdZF6O9K3QJyh4TWiuHyzA9PoBk__GaSv8A3OZY678WE9-Z_YicrLizmkgRuFi2Z0X_aMWM8Ab4YOd1trXi81qdoeJKMdhg';
+const OAuthToken = 'eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiNjgxODVmZjEtNGU1MS00Y2U5LWFmMWMtNjg5ODEyMjAzMzE3In0.AQkAAAABAAUABwAA-X9RyjHWSAgAADmjXw0y1kgCACwrmmZu4FJFnVVOe267RZEVAAEAAAAYAAEAAAAFAAAADQAkAAAAZjBmMjdmMGUtODU3ZC00YTcxLWE0ZGEtMzJjZWNhZTNhOTc4EgABAAAABwAAAG1hbmFnZWQwAACoJOHIMdZI.qIbXxwJpVI2NA0wgxSgVn4pV0q4w9yQv1mzJcOu2n5-TlsJ8JsDY0RP79F99pIAx3_k9loMHb4icO5hlUcTyoHAcMFkW9jgUG8-QKjt7D5qVZ-oZie9K6FjfFVH19YGg3R5YjbCHewSxn-zDjyARuh0NmhVy3kKadkV0E3_Pysid8cDcZYER80wm-CWBfk7PV3Rq-VAW6S-F0c150zyewnEGmgHI8zeqX7IofCZvxlb7sk0hQ7T6P631bDoYAn-dUJ7Sh-s1GW6YQpwEv6QOO5lu_E1UhmQyjvpaTWSBjyjFTJeAJ4rWTe229HQ8eb_V5ROnQNXpCdHR5A12jxxBRQ';
 const accountId = '6807374';
 apiClient.setBasePath('https://demo.docusign.net/restapi');
 apiClient.addDefaultHeader('Authorization', 'Bearer ' + OAuthToken);
@@ -35,7 +35,7 @@ app.post('/sendReleaseForm', function (req, res){
     uri: 'http://localhost:5000/getPDFBytes',
     method: 'POST',
     headers: {
-      'content-type': 'application/json'
+      'content-type': 'application/json',
     },
     json: {
       'bucket': Imgbucket,
@@ -58,6 +58,24 @@ app.post('/webhook', bodyParser.text({
     webhook(request.body);
     response.send("Received!");
 });
+
+
+app.get('/getEnvelopeStatus', function (req, res) {
+
+    envelopeId = req.query.envelopeId;
+    var options = {
+      uri: 'https://demo.docusign.net/restapi/v2/accounts/6807374/envelopes?envelope_ids=' + envelopeId,
+      method: 'GET',
+      headers: {'content-type': 'application/json', 'Authorization': 'Bearer ' + OAuthToken},
+
+    }
+
+    request(options, function(err, resp, body){
+      body = JSON.parse(body);
+
+      res.send({"status": body.envelopes[0].status})
+    })
+})
 
 
 app.post('/sendDocument', function (req, res) {
