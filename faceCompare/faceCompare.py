@@ -35,6 +35,21 @@ def main(event, context):
                     }
             ret["users"].append(userRet)
 
+    respFace = client.detect_faces(
+            Image={
+                'S3Object': {
+                    'Bucket': 'sdhack',
+                    'Name': event["queryStringParameters"]["photo"]
+                    }
+                },
+            Attributes=['ALL']
+            )
+    while len(respFace["FaceDetails"]) > len(ret["users"]):
+        userRet={
+                'name': 'Unknown Person',
+                'id': -1
+                }
+        ret["users"].append(userRet)
 
     return {
                 'statusCode': 200,
