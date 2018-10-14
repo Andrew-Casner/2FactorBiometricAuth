@@ -45,11 +45,20 @@ app.post('/sendReleaseForm', function (req, res){
 
 app.post('/sendDocument', function (req, res) {
 
-  
+
 
   // *** Begin envelope creation ***
 
   //Read the file you wish to send from the local machine.
+<<<<<<< HEAD
+=======
+  //fileName = "./consent.pdf";
+  //pdfBytes = fs.readFileSync(path.resolve(__dirname, fileName));
+  ///pdfBase64 = pdfBytes.toString('base64');
+
+  docusign.Configuration.default.setDefaultApiClient(apiClient);
+
+>>>>>>> a61730534ab3368158947a0b8ea40f80e1830256
   recipientName = req.body.fullName;
   recipientEmail = req.body.email;
   recipientImages = req.body.TaggedIms;
@@ -137,26 +146,24 @@ app.post('/sendDocument', function (req, res) {
     }
   
     // *** End envelope creation ***
-    
-    
+
+
     //Send the envelope
     var envelopesApi = new docusign.EnvelopesApi();
     console.log(envDef);
     envelopesApi.createEnvelope(accountId, { 'envelopeDefinition': envDef }, function (err, envelopeSummary, response) {
-  
+
       if (err) {
         return res.send('Error while sending a DocuSign envelope:' + err);
       }
-  
+
       res.send(envelopeSummary);
-  
+
     });
 
-  
+
 
   });
-
-
 });
 
 

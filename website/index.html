@@ -13,29 +13,157 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
 
-    <title>EscroWSign</title>
+    <title>New Name Needed</title>
 </head>
 <body>
-    <div class="wrapper">
-    <!-- Sidebar -->
-        <nav id="sidebar">
-            <div class="sidebar-header">
-                <h3>EscrowSign</h3>
-            </div>
-            <ul class="list-unstyled components">
-                <li>
-                    <a href="#">Photos</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Name</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Photos<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="run">Run Demo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="clear">Clear Demo</a>
                 </li>
             </ul>
-        </nav>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row" id="row1">
+            <div class="col-sm-4">
+                <img src="https://s3-us-west-2.amazonaws.com/sdhack/1.jpg" width="100%"></img>
+            </div>
+            <div class="col-sm-8">
+                <h4 id="name11"><i class="fa fa-check" aria-hidden="true" id="icon11"></i><span class="text"></span></h4>
+                <h4 id="name12"><i class="fa fa-check" aria-hidden="true" id="icon12"></i><span class="text"></span></h4>
+                <h4 id="name13"><i class="fa fa-check" aria-hidden="true" id="icon13"></i><span class="text"></span></h4>
+            </div>
+        </div>
+        <div class="row" id="row2">
+            <div class="col-sm-4">
+                <img src="https://s3-us-west-2.amazonaws.com/sdhack/2.jpg" width="100%"></img>
+            </div>
+            <div class="col-sm-8">
+                <h4 id="name21"><i class="fa fa-check" aria-hidden="true" id="icon21"></i><span class="text"></span></h4>
+                <h4 id="name22"><i class="fa fa-check" aria-hidden="true" id="icon22"></i><span class="text"></span></h4>
+                <h4 id="name23"><i class="fa fa-check" aria-hidden="true" id="icon23"></i><span class="text"></span></h4>
+            </div>
+        </div>
+        <div class="row" id="row3">
+            <div class="col-sm-4">
+                <img src="https://s3-us-west-2.amazonaws.com/sdhack/3.jpg" width="100%"></img>
+            </div>
+            <div class="col-sm-8">
+                <h4 id="name31"><i class="fa fa-check" aria-hidden="true" id="icon31"></i><span class="text"></span></h4>
+                <h4 id="name32"><i class="fa fa-check" aria-hidden="true" id="icon32"></i><span class="text"></span></h4>
+                <h4 id="name33"><i class="fa fa-check" aria-hidden="true" id="icon33"></i><span class="text"></span></h4>
+            </div>
+        </div>
+        <div class="row" id="row4">
+            <div class="col-sm-4">
+                <img src="https://s3-us-west-2.amazonaws.com/sdhack/4.jpg" width="100%"></img>
+            </div>
+            <div class="col-sm-8">
+                <h4 id="name41"><i class="fa fa-check" aria-hidden="true" id="icon41"></i><span class="text"></span></h4>
+                <h4 id="name42"><i class="fa fa-check" aria-hidden="true" id="icon42"></i><span class="text"></span></h4>
+                <h4 id="name43"><i class="fa fa-check" aria-hidden="true" id="icon43"></i><span class="text"></span></h4>
+            </div>
+        </div>
+        <div class="row" id="row5">
+            <div class="col-sm-4">
+                <img src="https://s3-us-west-2.amazonaws.com/sdhack/5.jpg" width="100%"></img>
+            </div>
+            <div class="col-sm-8">
+                <h4 id="name51"><i class="fa fa-check" aria-hidden="true" id="icon51"></i><span class="text"></span></h4>
+                <h4 id="name52"><i class="fa fa-check" aria-hidden="true" id="icon52"></i><span class="text"></span></h4>
+                <h4 id="name53"><i class="fa fa-check" aria-hidden="true" id="icon53"></i><span class="text"></span></h4>
+            </div>
+        </div>
     </div>
-    <h1>Hello world</h1>
 
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <!-- Popper.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <!-- Bootstrap JS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- Scripts -->
+    <script>
+        $("#run").click(function() {
+            $.ajax({
+                url: "https://cev0pg42c5.execute-api.us-west-2.amazonaws.com/v1/getusers",
+                typ: "get",
+                data: {
+                    "photo": "3.jpg"
+                },
+                success: function(response) {
+                    if (response.users[0]) {
+                        $("#name31 .text").text(response.users[0].name);
+                    }
+                    else {
+                        $("#name31").hide();
+                    }
+                    if (response.users[1]) {
+                        $("#name32 .text").text(response.users[1].name);
+                    }
+                    else {
+                        $("#name32").hide();
+                    }
+                    if (response.users[2]) {
+                        $("#name33 .text").text(response.users[2].name);
+                    }
+                    else {
+                        $("#name33").hide();
+                    }
+                },
+                error: function(xhr) {
+                    console.log(xhr);
+                }
+            });
+        });
+        $("#clear").click(function() {
+            $("#icon11").hide();
+            $("#icon12").hide();
+            $("#icon13").hide();
+            $("#icon21").hide();
+            $("#icon22").hide();
+            $("#icon23").hide();
+            $("#icon31").hide();
+            $("#icon32").hide();
+            $("#icon33").hide();
+            $("#icon41").hide();
+            $("#icon42").hide();
+            $("#icon43").hide();
+            $("#icon51").hide();
+            $("#icon52").hide();
+            $("#icon53").hide();
+            $("#name11").hide();
+            $("#name12").hide();
+            $("#name13").hide();
+            $("#name21").hide();
+            $("#name22").hide();
+            $("#name23").hide();
+            $("#name31").hide();
+            $("#name32").hide();
+            $("#name33").hide();
+            $("#name41").hide();
+            $("#name42").hide();
+            $("#name43").hide();
+            $("#name51").hide();
+            $("#name52").hide();
+            $("#name53").hide();
+        });
+    </script>
     </body>
 </html>

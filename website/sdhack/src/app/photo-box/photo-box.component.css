@@ -1,0 +1,103 @@
+#card {
+  -webkit-box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.20);
+  -moz-box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.20);
+  box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.20);
+  background-color: #FFF;
+  cursor: pointer;
+  min-height: 105px;
+  max-height: 250px;
+}
+
+#card:hover {
+  opacity: 0.5;
+}
+
+#card:hover > #upload h2{
+    color: black;
+}
+
+.row {
+  margin-bottom: 3px;
+  position: relative;
+}
+
+#card-dark {
+  min-height: 105px;
+  background-color: #808080;
+}
+
+#card-dark h1 {
+  color: white;
+  font-weight: 700;
+  margin-top: 20px;
+  margin-bottom: 0px;
+}
+
+#card-dark h3 {
+  color: white;
+  font-weight: 700;
+  margin-top: 5px;
+}
+
+img {
+  margin-top: 17.5px;
+  margin-bottom: 17.5px;
+
+}
+
+#logo {
+  padding-right: 0px;
+  padding-left: 0px;
+  width: 75px;
+}
+
+h2 {
+  margin-top: 34.9px;
+  margin-bottom: 34.9px;
+  font-weight: 700;
+}
+
+#vs {
+  padding-right: 3px;
+}
+
+#name {
+  min-height: 105px;
+  white-space: nowrap;
+  display: inline-block;
+  max-width: 1000px;
+  text-overflow: ellipsis;
+  margin-top: 17.5px;
+}
+
+h1 {
+  font-weight: 700;
+  margin-top: 20.6px;
+  margin-bottom: 0px;
+}
+
+h4 {
+  font-weight: 700;
+  color: #808080;
+  margin-top: 5px;
+  margin-bottom: 0px;
+}
+
+#time {
+  background-color: white;
+  z-index: 1;
+}
+
+#time h2 {
+  color: #808080;
+  font-weight: 400;
+}
+
+#upload {
+    cursor: crosshair;
+}
+
+#upload h2{
+    color: white;
+    transition: color .5s;
+}

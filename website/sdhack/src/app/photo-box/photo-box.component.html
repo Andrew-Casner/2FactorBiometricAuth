@@ -1,0 +1,12 @@
+<div class="row" id="card">
+  <div class="col-xs-4" id="photo">
+      <img [src]="image" width ="220px" height="165px"/>
+  </div>
+  <div class="col-xs-1 text-left">
+  </div>
+  <div class="col-xs-7 text-left" id="names">
+      <div *ngFor="let user of users">
+          <h4>{{user?.name}}</h4>
+      </div>
+  </div>
+</div>

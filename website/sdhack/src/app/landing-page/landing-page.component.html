@@ -1,0 +1,9 @@
+<app-header></app-header>
+<div class="container">
+    <div *ngFor="let photo of photos">
+        <app-photo-box *ngIf="photo"
+                        image={{photo?.img}}
+                        key={{photo?.key}}>
+        </app-photo-box>
+    </div>
+</div>

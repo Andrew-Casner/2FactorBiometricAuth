@@ -1,0 +1,8 @@
+<app-header></app-header>
+<div class="container">
+    <div *ngFor="let user of users">
+        <app-user-box nameFull={{user?.name}}
+                      img={{user?.img}}>
+        </app-user-box>
+    </div>
+</div>

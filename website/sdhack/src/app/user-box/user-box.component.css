@@ -1,0 +1,42 @@
+#card {
+  -webkit-box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.20);
+  -moz-box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.20);
+  box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.20);
+  background-color: #FFF;
+  cursor: pointer;
+  min-height: 105px;
+  max-height: 250px;
+}
+
+#card:hover {
+  opacity: 0.5;
+}
+
+#card:hover > #upload h2{
+    color: black;
+}
+
+.row {
+  margin-bottom: 3px;
+  position: relative;
+}
+
+
+img {
+  margin-top: 17.5px;
+  margin-bottom: 17.5px;
+
+}
+
+h1 {
+  font-weight: 700;
+  margin-top: 20.6px;
+  margin-bottom: 0px;
+}
+
+h4 {
+  font-weight: 700;
+  color: #808080;
+  margin-top: 5px;
+  margin-bottom: 0px;
+}
