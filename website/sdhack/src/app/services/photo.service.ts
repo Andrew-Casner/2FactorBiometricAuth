@@ -27,6 +27,10 @@ export class PhotoService {
       return this.http.get(this.api + '/getphotos');
   }
 
+  getUserImageMatches(user): Observable<any>{
+      return this.http.get(this.api + '/getalluserimagematches?user=' + user)
+  }
+
   uploadPhoto(file) {
     AWS.config.region = 'us-west-2';
     AWS.config.accessKeyId = 'AKIAJGRZDIA3AW5G2UFQ';
@@ -35,5 +39,5 @@ export class PhotoService {
     const params = {Key: file.name , Body: file};
     let up = bucket.upload(params);
     up.send(function(err, data) { console.log(err, data) });
-  }
+    }
 }
