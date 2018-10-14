@@ -42,6 +42,18 @@ app.post('/sendReleaseForm', function (req, res){
 
 });
 
+app.post('/webhook', bodyParser.text({
+    limit: '50mb',
+    type: '*/xml'
+}), function(request, response) {
+    var contentType = request.headers['content-type'] || '',
+        mime = contentType.split(';')[0];
+    console.log(mime);
+    console.log("webhook request body: " + JSON.stringify(request.body));
+    webhook(request.body);
+    response.send("Received!");
+});
+
 
 app.post('/sendDocument', function (req, res) {
 
@@ -133,8 +145,28 @@ app.post('/sendDocument', function (req, res) {
       ],
       "emailSubject": "Your consent is required for the release of these photo(s)",
       "emailBlurb": "There were several photos taken of you during SDHacks, please tka the time to approve them",
-      "status": "sent"
-    }
+      "status": "sent",
+      "eventNotification": {
+        "url": "http://ec2-54-213-135-243.us-west-2.compute.amazonaws.com:5000/webhook",
+        "includeCertificateOfCompletion": "false",
+        "includeDocuments": "true",
+        "includeDocumentFields": "true",
+        "requireAcknowledgment": "true",
+        "envelopeEvents": [{"envelopeEventStatusCode": "sent"},
+		  	{"envelopeEventStatusCode": "delivered"},
+		  	{"envelopeEventStatusCode": "completed"},
+			  {"envelopeEventStatusCode": "declined"},
+			  {"envelopeEventStatusCode": "voided"}],
+		    "recipientEvents": [
+			  {"recipientEventStatusCode": "Sent"},
+			  {"recipientEventStatusCode": "Delivered"},
+			  {"recipientEventStatusCode": "Completed"},
+			  {"recipientEventStatusCode": "Declined"},
+			  {"recipientEventStatusCode": "AuthenticationFailed"},
+			  { "recipientEventStatusCode": "AutoResponded"}
+        ]}
+   }
+    
   
     // *** End envelope creation ***
 
