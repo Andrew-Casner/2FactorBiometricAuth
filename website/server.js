@@ -5,13 +5,12 @@ const bodyParser = require('body-parser');
 const request = require('request');
 const docusign = require('docusign-esign');
 const app = express();
-const docConn = require('./docusignRoutes/testSendEnvelope.js')
 const apiClient = new docusign.ApiClient();
 const fs = require('fs');
 
 
 
-const OAuthToken = 'eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiNjgxODVmZjEtNGU1MS00Y2U5LWFmMWMtNjg5ODEyMjAzMzE3In0.AQkAAAABAAUABwAATg-fVzHWSAgAAI4yrZox1kgCACwrmmZu4FJFnVVOe267RZEVAAEAAAAYAAEAAAAFAAAADQAkAAAAZjBmMjdmMGUtODU3ZC00YTcxLWE0ZGEtMzJjZWNhZTNhOTc4EgACAAAABwAAAG1hbmFnZWQLAAAAaW50ZXJhY3RpdmUwAAAh3p1XMdZI.BXA4cBQLbQtjuq6DLG81vCQ__FBpDQN91pUyoyxoDPn9n6Er5bjphBSg3dAi9xIhO7rldaWNa0cPsOEuNITn3cPgf6XaaQNdO0lF3qTuT2EtPX7Av9BHPf8jsx-yX4OTuKQICbchtdmPAFN_r_EGJcgooloXI6CaeEPeZr1Ey1K_uj4WCFQZmNcNXVHwzqkVDCiJTy3yxB5ooH0cIZIACr54nHjTEK7XYu58epa8C2kXaBdAozoEGlK1EoID6PdrMrlZviwhpAdvPo361aJ7janTCWZubRztm2ybYHR5r7IvQQ6RGq8M9DyPUOI-LsptHVGmL78Nj7pj1rm9BxLgmQ';
+const OAuthToken = 'eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiNjgxODVmZjEtNGU1MS00Y2U5LWFmMWMtNjg5ODEyMjAzMzE3In0.AQkAAAABAAUABwAAchHQmzHWSAgAALI03t4x1kgCACwrmmZu4FJFnVVOe267RZEVAAEAAAAYAAEAAAAFAAAADQAkAAAAZjBmMjdmMGUtODU3ZC00YTcxLWE0ZGEtMzJjZWNhZTNhOTc4EgABAAAABwAAAG1hbmFnZWQwAIB54AmYMdZI.ZDrJaF8MniC9KoszjNW2WfmlHxUfuyz-EshfSYgjGT1OTmuwPsTSPKpnZPOQC_u8FFhsOfh_zUS2yB97mAcCnJ0OgVlj_F-0-JJWAO6VdEl72ApIXzN7IFea1Ypj17W4uoq-wqqsK-ROYNiq3RKp2geWxngRxsCikuAJrmiJhyaX9Q23rKMEHHcMS7O0Vq6bohSV_v4nKNXUrD1Cp0QeXy8CXI1uX0EyahUE-xyPOxhXNjIYBY0iRWhsdZF6O9K3QJyh4TWiuHyzA9PoBk__GaSv8A3OZY678WE9-Z_YicrLizmkgRuFi2Z0X_aMWM8Ab4YOd1trXi81qdoeJKMdhg';
 const accountId = '6807374';
 apiClient.setBasePath('https://demo.docusign.net/restapi');
 apiClient.addDefaultHeader('Authorization', 'Bearer ' + OAuthToken);
@@ -24,8 +23,41 @@ app.use('/', express.static(path.join(__dirname, 'sdhack/dist')));
 app.use('*', express.static(path.join(__dirname, 'sdhack/dist')));
 
 app.use(bodyParser.json());
+docusign.Configuration.default.setDefaultApiClient(apiClient);
 
 
+app.post('/sendReleaseForm', function (req, res){
+  recipientName = req.body.fullName;
+  recipientEmail = req.body.email;
+  recipientImages = req.body.TaggedIms;
+  Imgbucket = req.body.bucket;
+  var options = {
+    uri: 'http://localhost:5000/getPDFBytes',
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+    },
+    json: {
+      'bucket': Imgbucket,
+      'TaggedIms': recipientImages
+    }
+  };
+
+
+
+});
+
+app.post('/webhook', bodyParser.text({
+    limit: '50mb',
+    type: '*/xml'
+}), function(request, response) {
+    var contentType = request.headers['content-type'] || '',
+        mime = contentType.split(';')[0];
+    console.log(mime);
+    console.log("webhook request body: " + JSON.stringify(request.body));
+    webhook(request.body);
+    response.send("Received!");
+});
 
 
 app.post('/sendDocument', function (req, res) {
@@ -35,12 +67,6 @@ app.post('/sendDocument', function (req, res) {
   // *** Begin envelope creation ***
 
   //Read the file you wish to send from the local machine.
-  //fileName = "./consent.pdf";
-  //pdfBytes = fs.readFileSync(path.resolve(__dirname, fileName));
-  ///pdfBase64 = pdfBytes.toString('base64');
-
-  docusign.Configuration.default.setDefaultApiClient(apiClient);
-
   recipientName = req.body.fullName;
   recipientEmail = req.body.email;
   recipientImages = req.body.TaggedIms;
@@ -59,129 +85,93 @@ app.post('/sendDocument', function (req, res) {
   };
   console.log(options)
   request(options, function(err, resp, body){
-    var envDef = new docusign.EnvelopeDefinition();
 
-    //Set the Email Subject line and email message
-    envDef.emailSubject = 'Your consent is required for the release of these photo(s)';
-    envDef.emailBlurb = 'Please review the following contract and approve/reject tagged photos'
+    envDef = {
+      "compositeTemplates": [
+        {
+          "inlineTemplates": [
+            {
+              "recipients": {
+                "signers": [
+                  {
+                    "email": recipientEmail,
+                    "name": recipientName,
+                    "recipientId": "1",
+                    "roleName": "Subject of Photo(s) to Release"
+                  }
+                ]
+              },
+              "sequence": "1"
+            }
+          ],
+          "serverTemplates": [
+            {
+              "sequence": "1",
+              "templateId": "4f805d17-2e10-45a1-8701-bdd998231958"
+            }
+          ]
+        },
+        {
+          "document": {
+            "documentBase64": body.pdfb64,
+            "documentId": "1",
+            "name": "Photograph Consent"
+          },
+          "inlineTemplates": [
+            {
+              "recipients": {
+                "signers": [
+                  {
+                    "email": recipientEmail,
+                    "name": recipientName,
+                    "recipientId": "1",
+                    "roleName": "Subject of Photo(s) to Release",
+                    "tabs": {
+                      "initialHereTabs": [
+                        {
+                          "anchorString": "Initial",
+                          "anchorUnits": "Inches",
+                          "anchorXOffset": "0",
+                          "anchorYOffset": "0.6",
+                          "documentId": "1",
+                          "page": "2",
+                          "optional": "true"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "sequence": "2"
+            }
+          ]
+        }
 
-    //Read the file from the document and convert it to a Base64String
-    var doc = new docusign.Document();
+      ],
+      "emailSubject": "Your consent is required for the release of these photo(s)",
+      "emailBlurb": "There were several photos taken of you during SDHacks, please tka the time to approve them",
+      "status": "sent",
+      "eventNotification": {
+        "url": "http://ec2-52-12-126-217.us-west-2.compute.amazonaws.com/webhook",
+        "includeCertificateOfCompletion": "false",
+        "includeDocuments": "true",
+        "includeDocumentFields": "true",
+        "requireAcknowledgment": "true",
+        "envelopeEvents": [{"envelopeEventStatusCode": "sent"},
+		  	{"envelopeEventStatusCode": "delivered"},
+		  	{"envelopeEventStatusCode": "completed"},
+			  {"envelopeEventStatusCode": "declined"},
+			  {"envelopeEventStatusCode": "voided"}],
+		    "recipientEvents": [
+			  {"recipientEventStatusCode": "Sent"},
+			  {"recipientEventStatusCode": "Delivered"},
+			  {"recipientEventStatusCode": "Completed"},
+			  {"recipientEventStatusCode": "Declined"},
+			  {"recipientEventStatusCode": "AuthenticationFailed"},
+			  { "recipientEventStatusCode": "AutoResponded"}
+        ]}
+   }
 
-    doc.documentBase64 = body.pdfb64;
-
-    doc.fileExtension = 'pdf';
-    doc.name = recipientName + " image form";
-    doc.documentId = '1';
-
-    //Push the doc to the documents array.
-    var docs = [];
-    docs.push(doc);
-    envDef.documents = docs;
-
-    //Create the signer with the previously provided name / email address
-    var signer = new docusign.Signer();
-    signer.name = recipientName;
-    signer.email = recipientEmail;
-    signer.routingOrder = '1';
-    signer.recipientId = '1';
-    console.log(signer);
-
-    //
-    //Create a tabs object and a signHere tab to be placed on the envelope
-    var tabs = new docusign.Tabs();
-
-    var initialHere = new docusign.InitialHere();
-    initialHere.documentId = '1';
-    initialHere.pageNumber = '1';
-    initialHere.recipientId = '1';
-    initialHere.tabLabel = 'initialhereTab';
-    initialHere.anchorString = 'Initial';
-    initialHere.anchorXOffset = "0";
-    initialHere.anchorYOffset = "0.5";
-    initialHere.anchorUnits = "inches";
-
-    initialArray = [];
-    initialArray.push(initialHere);
-    tabs.initialHereTabs = initialArray;
-
-    /*
-    signHereTabArray = [];
-    signHereTabArray.push(signHere);
-
-    tabs.signHereTabs = signHereTabArray;
-
-    var text = new docusign.Text();
-    text.documentId = '1';
-    text.pageNumber = '1';
-    text.recipientId = '1';
-    text.anchorString = 'sender_name';
-    text.locked = 'true';
-    text.fontSize = 'Size16';
-    text.anchorXOffset = "0";
-    text.anchorYOffset = "-0.15";
-    text.anchorUnits = "inches";
-    text.value = 'SDHacks';
-
-    textTabArray = [];
-    textTabArray.push(text);
-
-    var text = new docusign.Text();
-    text.documentId = '1';
-    text.pageNumber = '1';
-    text.recipientId = '1';
-    text.anchorString = 'recipient_name';
-    text.locked = 'true';
-    text.fontSize= 'Size12';
-    text.anchorYOffset = "-0.15";
-    text.anchorUnits = "inches";
-    text.value = recipientName;
-
-    var lTabs = new docusign.List();
-    lTabs.anchorString = 'consent_choice';
-    lTabs.documentId = '1';
-    lTabs.pageNumber = '1';
-    lTabs.required = 'true';
-
-    lTabsItems = [];
-    listItem = new docusign.ListItem();
-    listItem.text = "give";
-    listItem.value = "give";
-    lTabsItems.push(listItem);
-    listItem = new docusign.ListItem();
-    listItem.text = "do not give";
-    listItem.value = "do not give";
-    lTabsItems.push(listItem);
-    lTabs.listItems = lTabsItems;
-    console.log(lTabs.listItems);
-    console.log(lTabs)
-
-
-
-    textTabArray.push(text);
-    tabs.textTabs = textTabArray;
-    */
-
-
-    //Create the array for SignHere tabs, then add it to the general tab array
-
-
-    //Then set the recipient, named signer, tabs to the previously created tab array
-    signer.tabs = tabs;
-
-    //Add the signer to the signers array
-    var signers = [];
-    signers.push(signer);
-
-    //Envelope status for drafts is created, set to sent if wanting to send the envelope right away
-    envDef.status = 'sent';
-
-    //Create the general recipients object, then set the signers to the signer array just created
-    var recipients = new docusign.Recipients();
-    recipients.signers = signers;
-
-    //Then add the recipients object to the enevelope definitions
-    envDef.recipients = recipients;
 
     // *** End envelope creation ***
 
