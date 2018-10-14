@@ -11,7 +11,6 @@ import { HttpClient} from '@angular/common/http';
 export class LandingPageComponent implements OnInit {
 
 file;
-payload;
   constructor(private photoService: PhotoService, private http: HttpClient) { }
 
   photos;
@@ -39,26 +38,44 @@ payload;
   }
 
   save(data) { 
-    if ( data.name === 'drew' ){
-        this.payload = {
+  console.log(data.name);
+    if ( data.name == 'drew' ){
+        let payload = {
         'fullName': 'Drew Casner',
         'email': 'anca0444@colorado.edu',
         'TaggedIms': data.matches,
         'bucket': 'sdhack'
         }
+        this.http.post('http://localhost:8080/sendDocument', payload).subscribe(data => this.sendDoc(data, 0));
     }
     else{
-        this.payload = {
+        let payload = {
         'fullName': 'Nick Erokhin',
         'email': 'nier7172@colorado.edu',
         'TaggedIms': data.matches,
         'bucket': 'sdhack'
         }
+        this.http.post('http://localhost:8080/sendDocument', payload).subscribe(data => this.sendDoc(data, 0));
     }
-    this.http.post('http://localhost:8080/sendDocument', this.payload).subscribe(data => this.sendDoc(data));
   }
 
-  sendDoc(data) {
-    console.log(data);
+  sendDoc(data, itr) {
+  console.log(data);
+    if ( data.name === 'Drew Casner' ){
+        let call = 'http://localhost:8080/getEnvelopeStatus?envelopeId=' + data.envelopeId;
+        console.log(call);
+        this.http.get(call).subscribe(data => this.finalSet(data, 'Drew Casner'));
+    }
+    else{ 
+        let call = 'http://localhost:8080/getEnvelopeStatus?envelopeId=' + data.envelopeId;
+        console.log(call);
+        this.http.get(call).subscribe(data => this.finalSet(data, 'Nick Erohin'));
+    }
   }
+
+  finalSet(data, name) {
+    console.log(name)
+    console.log(data)
+  }
+
 }
