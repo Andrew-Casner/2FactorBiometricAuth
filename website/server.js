@@ -16,6 +16,12 @@ apiClient.setBasePath('https://demo.docusign.net/restapi');
 apiClient.addDefaultHeader('Authorization', 'Bearer ' + OAuthToken);
 
 app.use(express.static(path.join(__dirname,'')));
+
+
+app.use(express.static(path.join(__dirname, 'sdhack/dist')));
+app.use('/', express.static(path.join(__dirname, 'sdhack/dist')));
+app.use('*', express.static(path.join(__dirname, 'sdhack/dist')));
+
 app.use(bodyParser.json());
 docusign.Configuration.default.setDefaultApiClient(apiClient);
 
@@ -79,7 +85,7 @@ app.post('/sendDocument', function (req, res) {
   };
   console.log(options)
   request(options, function(err, resp, body){
-  
+
     envDef = {
       "compositeTemplates": [
         {
@@ -140,7 +146,7 @@ app.post('/sendDocument', function (req, res) {
             }
           ]
         }
-        
+
       ],
       "emailSubject": "Your consent is required for the release of these photo(s)",
       "emailBlurb": "There were several photos taken of you during SDHacks, please tka the time to approve them",
@@ -165,8 +171,8 @@ app.post('/sendDocument', function (req, res) {
 			  { "recipientEventStatusCode": "AutoResponded"}
         ]}
    }
-    
-  
+
+
     // *** End envelope creation ***
 
 
