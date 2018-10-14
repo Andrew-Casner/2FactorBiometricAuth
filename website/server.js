@@ -17,9 +17,13 @@ apiClient.setBasePath('https://demo.docusign.net/restapi');
 apiClient.addDefaultHeader('Authorization', 'Bearer ' + OAuthToken);
 
 app.use(express.static(path.join(__dirname,'')));
+
+
+app.use(express.static(path.join(__dirname, 'sdhack/dist')));
+app.use('/', express.static(path.join(__dirname, 'sdhack/dist')));
+app.use('*', express.static(path.join(__dirname, 'sdhack/dist')));
+
 app.use(bodyParser.json());
-
-
 
 
 
