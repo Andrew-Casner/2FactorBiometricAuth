@@ -17,7 +17,7 @@ def main(event, context):
                 SourceImage={
                     'S3Object': {
                         'Bucket': 'sdhack',
-                        'Name': user[4]
+                        'Name': 'users/{}'.format(user[4])
                         }
                     },
                 TargetImage={
@@ -35,6 +35,7 @@ def main(event, context):
                     }
             ret["users"].append(userRet)
 
+
     return {
                 'statusCode': 200,
                 'headers': {
@@ -47,7 +48,7 @@ def main(event, context):
 if __name__ == "__main__":
     event = {
             'queryStringParameters': {
-                'photo': '3.jpg'
+                'photo': 'drew_nick.jpg'
                 }
             }
     context = None
