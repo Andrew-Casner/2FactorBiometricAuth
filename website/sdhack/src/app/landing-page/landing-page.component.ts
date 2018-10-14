@@ -20,4 +20,12 @@ export class LandingPageComponent implements OnInit {
   load(data){
     this.photos = data.photos;
   }
+
+  fileSelect(event) {
+    this.file = event.target.files[0];
+  }
+
+  upload(event) {
+    this.photoService.uploadPhoto(this.file);
+  }
 }

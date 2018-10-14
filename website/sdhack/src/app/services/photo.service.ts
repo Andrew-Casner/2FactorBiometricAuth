@@ -26,7 +26,18 @@ export class PhotoService {
   getAllPhotos(): Observable<any> {
       return this.http.get(this.api + '/getphotos');
   }
+
   getUserImageMatches(user): Observable<any>{
       return this.http.get(this.api + '/getalluserimagematches?user=' + user)
   }
+
+  uploadPhoto(file) {
+    AWS.config.region = 'us-west-2';
+    AWS.config.accessKeyId = 'AKIAJGRZDIA3AW5G2UFQ';
+    AWS.config.secretAccessKey = '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';
+    const bucket = new AWS.S3({params: {Bucket: 'sdhack'}});
+    const params = {Key: file.name , Body: file};
+    let up = bucket.upload(params);
+    up.send(function(err, data) { console.log(err, data) });
+    }
 }
