@@ -18,10 +18,29 @@ apiClient.addDefaultHeader('Authorization', 'Bearer ' + OAuthToken);
 
 app.use(express.static(path.join(__dirname,'')));
 app.use(bodyParser.json());
+docusign.Configuration.default.setDefaultApiClient(apiClient);
+
+
+app.post('/sendReleaseForm', function (req, res){
+  recipientName = req.body.fullName;
+  recipientEmail = req.body.email;
+  recipientImages = req.body.TaggedIms;
+  Imgbucket = req.body.bucket;
+  var options = {
+    uri: 'http://localhost:5000/getPDFBytes',
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+    },
+    json: {
+      'bucket': Imgbucket,
+      'TaggedIms': recipientImages
+    }
+  };
 
 
 
-
+});
 
 
 app.post('/sendDocument', function (req, res) {
@@ -31,12 +50,6 @@ app.post('/sendDocument', function (req, res) {
   // *** Begin envelope creation ***
 
   //Read the file you wish to send from the local machine.
-  //fileName = "./consent.pdf";
-  //pdfBytes = fs.readFileSync(path.resolve(__dirname, fileName));
-  ///pdfBase64 = pdfBytes.toString('base64');
-  
-  docusign.Configuration.default.setDefaultApiClient(apiClient);
-
   recipientName = req.body.fullName;
   recipientEmail = req.body.email;
   recipientImages = req.body.TaggedIms;
@@ -55,129 +68,73 @@ app.post('/sendDocument', function (req, res) {
   };
   console.log(options)
   request(options, function(err, resp, body){
-    var envDef = new docusign.EnvelopeDefinition();
-
-    //Set the Email Subject line and email message
-    envDef.emailSubject = 'Your consent is required for the release of these photo(s)';
-    envDef.emailBlurb = 'Please review the following contract and approve/reject tagged photos'
   
-    //Read the file from the document and convert it to a Base64String
-    var doc = new docusign.Document();
-  
-    doc.documentBase64 = body.pdfb64;
-  
-    doc.fileExtension = 'pdf';
-    doc.name = recipientName + " image form";
-    doc.documentId = '1';
-  
-    //Push the doc to the documents array.
-    var docs = [];
-    docs.push(doc);
-    envDef.documents = docs;
-  
-    //Create the signer with the previously provided name / email address
-    var signer = new docusign.Signer();
-    signer.name = recipientName;
-    signer.email = recipientEmail;
-    signer.routingOrder = '1';
-    signer.recipientId = '1';
-    console.log(signer);
-  
-    //
-    //Create a tabs object and a signHere tab to be placed on the envelope
-    var tabs = new docusign.Tabs();
-  
-    var initialHere = new docusign.InitialHere();
-    initialHere.documentId = '1';
-    initialHere.pageNumber = '1';
-    initialHere.recipientId = '1';
-    initialHere.tabLabel = 'initialhereTab';
-    initialHere.anchorString = 'Initial';
-    initialHere.anchorXOffset = "0";
-    initialHere.anchorYOffset = "0.5";
-    initialHere.anchorUnits = "inches";
-  
-    initialArray = [];
-    initialArray.push(initialHere);
-    tabs.initialHereTabs = initialArray;
-  
-    /*
-    signHereTabArray = [];
-    signHereTabArray.push(signHere);
-  
-    tabs.signHereTabs = signHereTabArray;
-  
-    var text = new docusign.Text();
-    text.documentId = '1';
-    text.pageNumber = '1';
-    text.recipientId = '1';
-    text.anchorString = 'sender_name';
-    text.locked = 'true';
-    text.fontSize = 'Size16';
-    text.anchorXOffset = "0";
-    text.anchorYOffset = "-0.15";
-    text.anchorUnits = "inches";
-    text.value = 'SDHacks';
-  
-    textTabArray = [];
-    textTabArray.push(text);
-  
-    var text = new docusign.Text();
-    text.documentId = '1';
-    text.pageNumber = '1';
-    text.recipientId = '1';
-    text.anchorString = 'recipient_name';
-    text.locked = 'true';
-    text.fontSize= 'Size12';
-    text.anchorYOffset = "-0.15";
-    text.anchorUnits = "inches";
-    text.value = recipientName;
-  
-    var lTabs = new docusign.List();
-    lTabs.anchorString = 'consent_choice';
-    lTabs.documentId = '1';
-    lTabs.pageNumber = '1';
-    lTabs.required = 'true';
-    
-    lTabsItems = [];
-    listItem = new docusign.ListItem();
-    listItem.text = "give";
-    listItem.value = "give";
-    lTabsItems.push(listItem);
-    listItem = new docusign.ListItem();
-    listItem.text = "do not give";
-    listItem.value = "do not give";
-    lTabsItems.push(listItem);
-    lTabs.listItems = lTabsItems;
-    console.log(lTabs.listItems);
-    console.log(lTabs)
-  
-  
-  
-    textTabArray.push(text);
-    tabs.textTabs = textTabArray;
-    */
-    
-  
-    //Create the array for SignHere tabs, then add it to the general tab array
-  
-  
-    //Then set the recipient, named signer, tabs to the previously created tab array
-    signer.tabs = tabs;
-  
-    //Add the signer to the signers array
-    var signers = [];
-    signers.push(signer);
-  
-    //Envelope status for drafts is created, set to sent if wanting to send the envelope right away
-    envDef.status = 'sent';
-  
-    //Create the general recipients object, then set the signers to the signer array just created
-    var recipients = new docusign.Recipients();
-    recipients.signers = signers;
-  
-    //Then add the recipients object to the enevelope definitions
-    envDef.recipients = recipients;
+    envDef = {
+      "compositeTemplates": [
+        {
+          "inlineTemplates": [
+            {
+              "recipients": {
+                "signers": [
+                  {
+                    "email": recipientEmail,
+                    "name": recipientName,
+                    "recipientId": "1",
+                    "roleName": "Subject of Photo(s) to Release"
+                  }
+                ]
+              },
+              "sequence": "1"
+            }
+          ],
+          "serverTemplates": [
+            {
+              "sequence": "1",
+              "templateId": "4f805d17-2e10-45a1-8701-bdd998231958"
+            }
+          ]
+        },
+        {
+          "document": {
+            "documentBase64": body.pdfb64,
+            "documentId": "1",
+            "name": "Photograph Consent"
+          },
+          "inlineTemplates": [
+            {
+              "recipients": {
+                "signers": [
+                  {
+                    "email": recipientEmail,
+                    "name": recipientName,
+                    "recipientId": "1",
+                    "roleName": "Subject of Photo(s) to Release",
+                    "tabs": {
+                      "initialHereTabs": [
+                        {
+                          "anchorString": "Initial",
+                          "anchorUnits": "Inches",
+                          "anchorXOffset": "0",
+                          "anchorYOffset": "0.6",
+                          "documentId": "1",
+                          "page": "2",
+                          "optional": "true"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "sequence": "2"
+            }
+          ]
+        }
+        
+      ],
+      "emailSubject": "Your consent is required for the release of these photo(s)",
+      "emailBlurb": "There were several photos taken of you during SDHacks, please tka the time to approve them",
+      "status": "sent"
+    }
   
     // *** End envelope creation ***
     
