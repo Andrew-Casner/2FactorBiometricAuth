@@ -6,4 +6,18 @@
                         key={{photo?.key}}>
         </app-photo-box>
     </div>
+    <div class="row" id="card">
+      <div class="col-xs-12 text-center" id="names">
+        <h3>Add Photo</h3>
+        <form method="post" enctype="multipart/form-data">
+            <div>
+                <label for="file">Choose video file</label>
+                <input type="file" id="file" name="file" multiple (change)="fileSelect($event)">
+            </div>
+            <div>
+                <button (click)="upload($event);$event.preventDefault()">Upload</button>
+            </div>
+        </form>
+      </div>
+    </div>
 </div>
