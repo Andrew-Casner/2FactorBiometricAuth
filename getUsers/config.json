@@ -1,0 +1,8 @@
+{
+	"dbname": "EscrowSign",
+	"user": "escrowsign",
+	"host": "escrowsign.c5otc3yhyeue.us-west-2.rds.amazonaws.com",
+	"password": "sdhacks2018",
+	"port": "5432",
+	"schema": "Public"
+}
