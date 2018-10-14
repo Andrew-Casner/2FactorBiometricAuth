@@ -26,4 +26,7 @@ export class PhotoService {
   getAllPhotos(): Observable<any> {
       return this.http.get(this.api + '/getphotos');
   }
+  getUserImageMatches(user): Observable<any>{
+      return this.http.get(this.api + '/getalluserimagematches?user=' + user)
+  }
 }
