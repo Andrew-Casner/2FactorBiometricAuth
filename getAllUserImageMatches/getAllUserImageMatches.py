@@ -8,7 +8,7 @@ def main(event, context):
     user = event["queryStringParameters"]["user"].lower()
     s3 = boto3.client('s3')
     photos = []
-    ret = { "match": []}
+    ret = { "matches": [], "name": user}
     for key in s3.list_objects(Bucket='sdhack')['Contents']:
         if len(key['Key'].split("/")) > 1:
             pass
@@ -19,15 +19,15 @@ def main(event, context):
                     }
 
             photos.append(retImg)
+    print(photos)
     client = boto3.client('rekognition')
 
     for photo in photos:
-        resp = client.compare_faces(
-
-                SourceImage={
-                    'S3Object': {
+        print(photo['key'])
+        resp = client.compare_faces(SourceImage={
+            'S3Object': {
                         'Bucket': 'sdhack',
-                        'Name': 'users/{}'.format(user[4])
+                        'Name': 'users/{}.jpg'.format(user)
                         }
                     },
                 TargetImage={
@@ -37,17 +37,15 @@ def main(event, context):
                         }
                     }
                 )
+        print(resp)
         match = resp["FaceMatches"]
+        print(match)
         if len(match) != 0:
-            userRet={
-                    'name': '{} {}'.format(user[2],user[3]),
-                    'id': user[0]
-                    }
-            ret["matches"].append(userRet)
+            ret["matches"].append(photo['key'])
 
         
 
-        return {
+    return {
                 'statusCode': 200,
                 'headers': {
                     'Access-Control-Allow-Origin': '*',
@@ -55,3 +53,5 @@ def main(event, context):
                     },
                 'body': json.dumps(ret, default = str)
                 }
+
+
